@@ -47,5 +47,5 @@ class NewAptsSpider(scrapy.Spider):
             email_content += self.settings['BASE_URL'] + item
             email_content += "\n"
         mailer = scrapy.mail.MailSender.from_settings(self.settings)
-        mailer.send(to=to,subject=subject,body=email_content)
+        mailer.send(to=to,subject=subject,body=email_content,cc=self.settings['MAIL_CC'])
 
