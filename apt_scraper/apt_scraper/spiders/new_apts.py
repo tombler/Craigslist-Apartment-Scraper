@@ -4,16 +4,12 @@ import sys
 import smtplib
 from datetime import datetime
 
-base_url = 'https://losangeles.craigslist.org'
-results_file = 'searched.json'
-log_file = 'log.txt'
-
 class NewAptsSpider(scrapy.Spider):
     name = "new_apts"
     start_urls = ['https://losangeles.craigslist.org/search/apa?sort=date&search_distance=6&postal=90034&max_price=2100&availabilityMode=0&pets_cat=1']
 
     def log(self, content):
-        with open(log_file, 'a') as f:
+        with open(self.settings['CUSTOM_LOG_FILE'], 'a') as f:
             f.write(str(content))
             f.write('\n')
             f.close()
@@ -23,7 +19,7 @@ class NewAptsSpider(scrapy.Spider):
 
         this_search = []
 
-        with open(results_file, 'r') as data_file:    
+        with open(self.settings['RESULTS_FILE'], 'r') as data_file:    
             searched_apts = json.load(data_file)['urls']
 
         for url in response.xpath('//a[contains(@class, "result-title")]/@href').extract():
@@ -36,7 +32,7 @@ class NewAptsSpider(scrapy.Spider):
             self.log("New apts found:")
             self.log(this_search)
 
-            with open(results_file, 'w') as data_file:
+            with open(self.settings['RESULTS_FILE'], 'w') as data_file:
                 json.dump({"urls": updated_search}, data_file)
 
             self.send_email(this_search)
@@ -50,7 +46,7 @@ class NewAptsSpider(scrapy.Spider):
         subject = "New apartments found on Craigslist"
         email_content = "New apartments on Craigslist:\n\n"
         for item in this_search:
-            email_content += base_url + item
+            email_content += self.settings['BASE_URL'] + item
             email_content += "\n"
         mailer = scrapy.mail.MailSender.from_settings(self.settings)
         mailer.send(to=to,subject=subject,body=email_content)
