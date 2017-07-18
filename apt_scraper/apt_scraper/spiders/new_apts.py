@@ -1,7 +1,5 @@
 import scrapy
 import json
-import sys
-import smtplib
 from datetime import datetime
 
 class NewAptsSpider(scrapy.Spider):
