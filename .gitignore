@@ -2,3 +2,4 @@
 *.pyc
 **/*/log.txt
 **/*/searched.json
+run.sh
