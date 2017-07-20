@@ -4,7 +4,7 @@ from datetime import datetime
 
 class NewAptsSpider(scrapy.Spider):
     name = "new_apts"
-    start_urls = ['https://losangeles.craigslist.org/search/apa?sort=date&search_distance=4&postal=90034&max_price=2100&min_bedrooms=1&max_bedrooms=1&availabilityMode=0&pets_cat=1']
+    start_urls = ['https://losangeles.craigslist.org/search/apa?sort=date&search_distance=5&postal=90034&max_price=2100&min_bedrooms=1&max_bedrooms=1&availabilityMode=0&pets_cat=1']
 
     def log(self, content):
         with open(self.settings['CUSTOM_LOG_FILE'], 'a') as f:
